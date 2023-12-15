@@ -11,11 +11,13 @@ CHUNK_SIZE = 1024 * 1024  # 1MB
 
 class FileService(pb2_grpc.FileServiceServicer):
 
+    #get all chunk and save as file
     def save_chunks_to_file(self, chunks, filename):
         with open(filename, 'wb') as f:
             for chunk in chunks:
                 f.write(chunk.buffer)
-
+    
+    #upload file on server in chunk
     def UploadFileMetric(self, request_iterator, context):
         first_chunk = next(request_iterator)
         filename = first_chunk.buffer.decode('utf-8')
@@ -32,9 +34,9 @@ class FileService(pb2_grpc.FileServiceServicer):
 
         return response
 
-
+    # connect to server
     def sayHelloMetric(self, request, context):
-        print("Inside Say Hello Method")
+        print("Companion APP connected to Metric Central Server")
         response = pb2.HelloReplyMetric();
         response.message = f"Hello {request.name}"
         return response
